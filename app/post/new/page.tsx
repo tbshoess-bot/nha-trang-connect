@@ -15,6 +15,7 @@ export default function NewPostPage() {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [category, setCategory] = useState<string>(t.categories[0].value);
+  const currentCategories = type === "event" ? t.eventCategories : t.categories;
   const [eventDate, setEventDate] = useState("");
   const [location, setLocation] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -57,7 +58,7 @@ export default function NewPostPage() {
           <button
             key={pt}
             type="button"
-            onClick={() => setType(pt)}
+            onClick={() => { setType(pt); setCategory(pt === "event" ? t.eventCategories[0].value : t.categories[0].value); }}
             className={`flex-1 rounded-lg border py-2 text-sm transition ${
               type === pt ? "border-sea-500 bg-sea-500/10 text-sea-700" : "border-sand-300 text-ink-700/70"
             }`}
@@ -98,7 +99,7 @@ export default function NewPostPage() {
             onChange={(e) => setCategory(e.target.value)}
             className="w-full mt-1 rounded-lg border border-sand-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sea-500"
           >
-            {t.categories.map((c) => (
+            {currentCategories.map((c) => (
               <option key={c.value} value={c.value}>
                 {c.label}
               </option>

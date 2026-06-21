@@ -61,7 +61,7 @@ export const translations = {
     // Interests
     interestOptions: ["Diving", "Beach", "Nightlife", "Yoga", "Language practice", "Food"],
 
-    // Categories
+    // Question categories
     categories: [
       { value: "money", label: "Money / exchange" },
       { value: "shopping", label: "Shopping" },
@@ -69,6 +69,20 @@ export const translations = {
       { value: "transport", label: "Transport" },
       { value: "entertainment", label: "Entertainment" },
       { value: "other", label: "Other" },
+    ],
+
+    // Event categories
+    eventCategories: [
+      { value: "party", label: "🎉 Party" },
+      { value: "trip", label: "🚤 Day trip / boat tour" },
+      { value: "meetup", label: "☕ Meetup / hangout" },
+      { value: "diving", label: "🤿 Diving / snorkeling" },
+      { value: "sport", label: "🏄 Sport / activity" },
+      { value: "food", label: "🍜 Food & drinks" },
+      { value: "language", label: "🗣️ Language exchange" },
+      { value: "yoga", label: "🧘 Yoga / wellness" },
+      { value: "nightlife", label: "🌙 Nightlife / bar crawl" },
+      { value: "other", label: "📌 Other" },
     ],
 
     // PostCard
@@ -136,7 +150,7 @@ export const translations = {
     // Interests
     interestOptions: ["Дайвинг", "Пляж", "Ночная жизнь", "Йога", "Языковая практика", "Еда"],
 
-    // Categories
+    // Question categories
     categories: [
       { value: "money", label: "Деньги / обмен" },
       { value: "shopping", label: "Шопинг" },
@@ -144,6 +158,20 @@ export const translations = {
       { value: "transport", label: "Транспорт" },
       { value: "entertainment", label: "Развлечения" },
       { value: "other", label: "Другое" },
+    ],
+
+    // Event categories
+    eventCategories: [
+      { value: "party", label: "🎉 Вечеринка" },
+      { value: "trip", label: "🚤 Поездка / морская прогулка" },
+      { value: "meetup", label: "☕ Встреча / тусовка" },
+      { value: "diving", label: "🤿 Дайвинг / снорклинг" },
+      { value: "sport", label: "🏄 Спорт / активности" },
+      { value: "food", label: "🍜 Еда и напитки" },
+      { value: "language", label: "🗣️ Языковой обмен" },
+      { value: "yoga", label: "🧘 Йога / велнес" },
+      { value: "nightlife", label: "🌙 Ночная жизнь / бар-хоппинг" },
+      { value: "other", label: "📌 Другое" },
     ],
 
     // PostCard
