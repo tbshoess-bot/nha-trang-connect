@@ -14,7 +14,7 @@ export default function NewPostPage() {
   const [type, setType] = useState<PostType>("question");
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [category, setCategory] = useState(t.categories[0].value);
+  const [category, setCategory] = useState<string>(t.categories[0].value);
   const [eventDate, setEventDate] = useState("");
   const [location, setLocation] = useState("");
   const [error, setError] = useState<string | null>(null);
