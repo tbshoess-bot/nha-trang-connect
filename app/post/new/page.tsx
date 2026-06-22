@@ -21,7 +21,11 @@ export default function NewPostPage() {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [category, setCategory] = useState<string>(t.eventCategories[0].value);
-  const [eventDate, setEventDate] = useState("");
+  const [eventDay, setEventDay] = useState("");
+  const [eventMonth, setEventMonth] = useState("");
+  const [eventYear, setEventYear] = useState("");
+  const [eventHour, setEventHour] = useState("");
+  const [eventMinute, setEventMinute] = useState("");
   const [lat, setLat] = useState<number | null>(null);
   const [lng, setLng] = useState<number | null>(null);
   const [address, setAddress] = useState("");
@@ -75,7 +79,9 @@ export default function NewPostPage() {
         title,
         description: description || null,
         category: category || null,
-        event_date: type === "event" ? eventDate || null : null,
+        event_date: type === "event" && eventDay && eventMonth && eventYear
+          ? new Date(`${eventYear}-${eventMonth.padStart(2,"0")}-${eventDay.padStart(2,"0")}T${(eventHour||"12").padStart(2,"0")}:${(eventMinute||"00").padStart(2,"0")}:00`).toISOString()
+          : null,
         location: address || null,
         lat: type === "event" ? lat : null,
         lng: type === "event" ? lng : null,
@@ -173,13 +179,50 @@ export default function NewPostPage() {
             </div>
             <div>
               <label className="text-sm text-ink-700/70">{t.dateTime}</label>
-              <input
-                type="datetime-local"
-                required
-                value={eventDate}
-                onChange={(e) => setEventDate(e.target.value)}
-                className="w-full mt-1 rounded-lg border border-sand-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sea-500"
-              />
+              <div className="grid grid-cols-3 gap-2 mt-1">
+                <input
+                  type="number" min="1" max="31" placeholder={lang === "en" ? "Day" : "День"}
+                  value={eventDay} onChange={(e) => setEventDay(e.target.value)} required
+                  className="rounded-lg border border-sand-300 px-3 py-2 text-sm text-center focus:outline-none focus:ring-2 focus:ring-sea-500"
+                />
+                <select
+                  value={eventMonth} onChange={(e) => setEventMonth(e.target.value)} required
+                  className="rounded-lg border border-sand-300 px-2 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sea-500"
+                >
+                  <option value="">{lang === "en" ? "Month" : "Месяц"}</option>
+                  {(lang === "en"
+                    ? ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]
+                    : ["Янв","Фев","Мар","Апр","Май","Июн","Июл","Авг","Сен","Окт","Ноя","Дек"]
+                  ).map((m, i) => (
+                    <option key={i+1} value={String(i+1)}>{m}</option>
+                  ))}
+                </select>
+                <input
+                  type="number" min="2024" max="2030" placeholder={lang === "en" ? "Year" : "Год"}
+                  value={eventYear} onChange={(e) => setEventYear(e.target.value)} required
+                  className="rounded-lg border border-sand-300 px-3 py-2 text-sm text-center focus:outline-none focus:ring-2 focus:ring-sea-500"
+                />
+              </div>
+              <div className="grid grid-cols-2 gap-2 mt-2">
+                <select
+                  value={eventHour} onChange={(e) => setEventHour(e.target.value)}
+                  className="rounded-lg border border-sand-300 px-2 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sea-500"
+                >
+                  <option value="">{lang === "en" ? "Hour" : "Час"}</option>
+                  {Array.from({length: 24}, (_, i) => (
+                    <option key={i} value={String(i)}>{String(i).padStart(2,"0")}:00</option>
+                  ))}
+                </select>
+                <select
+                  value={eventMinute} onChange={(e) => setEventMinute(e.target.value)}
+                  className="rounded-lg border border-sand-300 px-2 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sea-500"
+                >
+                  <option value="">00 min</option>
+                  {["00","15","30","45"].map((m) => (
+                    <option key={m} value={m}>{m} min</option>
+                  ))}
+                </select>
+              </div>
             </div>
             <div>
               <label className="text-sm text-ink-700/70 block mb-1">{t.locationLabel}</label>
