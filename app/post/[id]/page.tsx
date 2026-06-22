@@ -2,10 +2,20 @@
 
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
+import dynamic from "next/dynamic";
 import { supabase } from "@/lib/supabase";
-import type { Post, Answer } from "@/lib/types";
+import type { Post, Answer, PostType } from "@/lib/types";
 import { useLanguage } from "@/lib/LanguageContext";
 import { translations } from "@/lib/translations";
+
+const MapPicker = dynamic(() => import("@/components/MapPicker"), { ssr: false });
+
+const BADGE: Record<PostType, string> = {
+  event: "bg-sunset-400/20 text-sunset-600",
+  question: "bg-sea-500/15 text-sea-700",
+  listing: "bg-sand-300/60 text-ink-700",
+  announcement: "bg-sunset-500/15 text-sunset-600",
+};
 
 export default function PostDetailPage() {
   const params = useParams<{ id: string }>();
@@ -19,11 +29,10 @@ export default function PostDetailPage() {
   const [newAnswer, setNewAnswer] = useState("");
   const [loading, setLoading] = useState(true);
   const [currentUserId, setCurrentUserId] = useState<string | null>(null);
-
-  // Edit state
   const [editing, setEditing] = useState(false);
   const [editTitle, setEditTitle] = useState("");
   const [editDescription, setEditDescription] = useState("");
+  const [imgIndex, setImgIndex] = useState(0);
 
   useEffect(() => {
     async function load() {
@@ -44,7 +53,6 @@ export default function PostDetailPage() {
           .select("*", { count: "exact", head: true })
           .eq("post_id", params.id);
         setParticipantCount(count ?? 0);
-
         if (userId) {
           const { data: existing } = await supabase
             .from("event_participants")
@@ -54,7 +62,7 @@ export default function PostDetailPage() {
             .maybeSingle();
           setJoined(!!existing);
         }
-      } else {
+      } else if (postData?.type === "question") {
         const { data: answerData } = await supabase
           .from("answers")
           .select("*")
@@ -88,10 +96,7 @@ export default function PostDetailPage() {
       .insert({ post_id: params.id, author_id: user.id, content: newAnswer })
       .select()
       .single();
-    if (data) {
-      setAnswers((prev) => [...prev, data as Answer]);
-      setNewAnswer("");
-    }
+    if (data) { setAnswers((prev) => [...prev, data as Answer]); setNewAnswer(""); }
   }
 
   async function handleMarkBest(answerId: string) {
@@ -99,6 +104,11 @@ export default function PostDetailPage() {
     setAnswers((prev) =>
       prev.map((a) => (a.id === answerId ? { ...a, is_best: true } : { ...a, is_best: false }))
     );
+  }
+
+  async function handleMarkAnswered() {
+    await supabase.from("posts").update({ is_answered: true }).eq("id", params.id);
+    setPost((prev) => prev ? { ...prev, is_answered: true } : prev);
   }
 
   async function handleDelete() {
@@ -121,38 +131,38 @@ export default function PostDetailPage() {
   if (loading) return <p className="text-ink-700/60 text-sm">{t.loading}</p>;
   if (!post) return <p className="text-ink-700/60 text-sm">{t.notFound}</p>;
 
-  const isEvent = post.type === "event";
   const isAuthor = currentUserId === post.author_id;
   const locale = lang === "ru" ? "ru-RU" : "en-GB";
-  const editLabel = lang === "en" ? "Edit" : "Редактировать";
-  const deleteLabel = lang === "en" ? "Delete" : "Удалить";
-  const cancelLabel = lang === "en" ? "Cancel" : "Отмена";
-  const saveLabel = lang === "en" ? "Save" : "Сохранить";
+
+  const badgeLabel =
+    post.type === "event" ? t.eventBadge :
+    post.type === "question" ? t.questionBadge :
+    post.type === "listing" ? t.listingBadge :
+    t.announcementBadge;
 
   return (
     <div className="space-y-5">
       <div>
-        <div className="flex items-start justify-between gap-2">
-          <span
-            className={`text-xs font-medium px-2 py-0.5 rounded-full ${
-              isEvent ? "bg-sunset-400/20 text-sunset-600" : "bg-sea-500/15 text-sea-700"
-            }`}
-          >
-            {isEvent ? t.eventBadge : t.questionBadge}
-          </span>
+        <div className="flex items-start justify-between gap-2 flex-wrap">
+          <div className="flex items-center gap-2">
+            <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${BADGE[post.type]}`}>
+              {badgeLabel}
+            </span>
+            {post.type === "question" && (
+              <span className={`text-xs px-2 py-0.5 rounded-full ${
+                post.is_answered ? "bg-sea-500/15 text-sea-700" : "bg-sand-300/60 text-ink-700/60"
+              }`}>
+                {post.is_answered ? t.statusAnswered : t.statusOpen}
+              </span>
+            )}
+          </div>
           {isAuthor && !editing && (
             <div className="flex gap-2 ml-auto">
-              <button
-                onClick={() => setEditing(true)}
-                className="text-xs text-ink-700/50 hover:text-sea-700 transition"
-              >
-                {editLabel}
+              <button onClick={() => setEditing(true)} className="text-xs text-ink-700/50 hover:text-sea-700 transition">
+                {lang === "en" ? "Edit" : "Редактировать"}
               </button>
-              <button
-                onClick={handleDelete}
-                className="text-xs text-ink-700/50 hover:text-sunset-600 transition"
-              >
-                {deleteLabel}
+              <button onClick={handleDelete} className="text-xs text-ink-700/50 hover:text-sunset-600 transition">
+                {lang === "en" ? "Delete" : "Удалить"}
               </button>
             </div>
           )}
@@ -172,17 +182,11 @@ export default function PostDetailPage() {
               className="w-full rounded-lg border border-sand-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sea-500"
             />
             <div className="flex gap-2">
-              <button
-                onClick={handleEditSave}
-                className="px-4 py-1.5 rounded-lg bg-sea-500 text-white text-sm font-medium hover:bg-sea-700 transition"
-              >
-                {saveLabel}
+              <button onClick={handleEditSave} className="px-4 py-1.5 rounded-lg bg-sea-500 text-white text-sm font-medium hover:bg-sea-700 transition">
+                {lang === "en" ? "Save" : "Сохранить"}
               </button>
-              <button
-                onClick={() => setEditing(false)}
-                className="px-4 py-1.5 rounded-lg border border-sand-300 text-sm text-ink-700/70 hover:border-sea-500 transition"
-              >
-                {cancelLabel}
+              <button onClick={() => setEditing(false)} className="px-4 py-1.5 rounded-lg border border-sand-300 text-sm text-ink-700/70 hover:border-sea-500 transition">
+                {lang === "en" ? "Cancel" : "Отмена"}
               </button>
             </div>
           </div>
@@ -194,12 +198,37 @@ export default function PostDetailPage() {
         )}
       </div>
 
-      {isEvent ? (
+      {/* EVENT */}
+      {post.type === "event" && (
         <div className="rounded-2xl border border-sand-300 bg-white p-4 space-y-3">
-          <p className="text-sm text-ink-700/70">
-            {post.event_date && new Date(post.event_date).toLocaleString(locale)}
-            {post.location && ` · ${post.location}`}
-          </p>
+          {post.event_date && (
+            <p className="text-sm text-ink-700/70">📅 {new Date(post.event_date).toLocaleString(locale)}</p>
+          )}
+          {(post.address || post.location) && (
+            <div className="space-y-2">
+              <p className="text-sm text-ink-700/70">📍 {post.address || post.location}</p>
+              {post.lat && post.lng && (
+                <div className="rounded-xl overflow-hidden border border-sand-300" style={{ height: 180 }}>
+                  <MapPicker
+                    lat={post.lat}
+                    lng={post.lng}
+                    address=""
+                    onChange={() => {}}
+                  />
+                </div>
+              )}
+              {post.lat && post.lng && (
+                <a
+                  href={`https://www.openstreetmap.org/?mlat=${post.lat}&mlon=${post.lng}&zoom=16`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-xs text-sea-700 hover:underline"
+                >
+                  {t.viewOnMap} ↗
+                </a>
+              )}
+            </div>
+          )}
           <p className="text-sm text-ink-700/70">{participantCount} {t.peopleAttending}</p>
           <button
             onClick={handleJoin}
@@ -209,9 +238,63 @@ export default function PostDetailPage() {
             {joined ? t.joined : t.join}
           </button>
         </div>
-      ) : (
+      )}
+
+      {/* LISTING */}
+      {post.type === "listing" && (
+        <div className="rounded-2xl border border-sand-300 bg-white p-4 space-y-3">
+          {post.images?.length > 0 && (
+            <div className="space-y-2">
+              <img
+                src={post.images[imgIndex]}
+                alt=""
+                className="w-full rounded-xl object-cover border border-sand-300"
+                style={{ maxHeight: 280 }}
+              />
+              {post.images.length > 1 && (
+                <div className="flex gap-2 overflow-x-auto">
+                  {post.images.map((img, i) => (
+                    <img
+                      key={i}
+                      src={img}
+                      alt=""
+                      onClick={() => setImgIndex(i)}
+                      className={`w-14 h-14 rounded-lg object-cover cursor-pointer border-2 transition ${
+                        i === imgIndex ? "border-sea-500" : "border-sand-300"
+                      }`}
+                    />
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+          <div className="flex items-center gap-3">
+            {post.price != null && (
+              <span className="text-2xl font-bold text-ink-900">${post.price}</span>
+            )}
+            {post.condition && (
+              <span className="text-sm px-2 py-0.5 rounded-full bg-sand-100 text-ink-700/70">
+                {post.condition === "new" ? t.conditionNew : t.conditionUsed}
+              </span>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* QUESTION answers */}
+      {post.type === "question" && (
         <div className="space-y-3">
-          <h2 className="text-sm font-medium text-ink-700/70">{answers.length} {t.answers}</h2>
+          <div className="flex items-center justify-between">
+            <h2 className="text-sm font-medium text-ink-700/70">{answers.length} {t.answers}</h2>
+            {isAuthor && !post.is_answered && (
+              <button
+                onClick={handleMarkAnswered}
+                className="text-xs text-sea-700 hover:underline"
+              >
+                {t.markAnswered}
+              </button>
+            )}
+          </div>
 
           {answers.map((answer) => (
             <div
@@ -225,10 +308,7 @@ export default function PostDetailPage() {
               )}
               <p className="text-sm text-ink-900 mt-1">{answer.content}</p>
               {!answer.is_best && isAuthor && (
-                <button
-                  onClick={() => handleMarkBest(answer.id)}
-                  className="text-xs text-ink-700/50 hover:text-sea-700 mt-2"
-                >
+                <button onClick={() => handleMarkBest(answer.id)} className="text-xs text-ink-700/50 hover:text-sea-700 mt-2">
                   {t.markBest}
                 </button>
               )}
@@ -243,10 +323,7 @@ export default function PostDetailPage() {
               rows={2}
               className="w-full rounded-lg border border-sand-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sea-500"
             />
-            <button
-              type="submit"
-              className="rounded-lg bg-sea-500 text-white px-4 py-2 text-sm font-medium hover:bg-sea-700 transition"
-            >
+            <button type="submit" className="rounded-lg bg-sea-500 text-white px-4 py-2 text-sm font-medium hover:bg-sea-700 transition">
               {t.answerBtn}
             </button>
           </form>

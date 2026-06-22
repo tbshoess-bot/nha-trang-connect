@@ -2,41 +2,57 @@ export type Lang = "en" | "ru";
 
 export const translations = {
   en: {
-    // Header
     share: "+ Share",
     login: "Login",
 
-    // Feed
     loadingFeed: "Loading feed...",
     noPosts: "No posts yet.",
     noPostsHint: "Be the first to share an event or question.",
 
-    // Login
     signIn: "Sign in",
     emailPlaceholder: "email@example.com",
     sendLoginLink: "Send login link",
     checkEmail: "Check your email",
     checkEmailHint: (email: string) => `We sent a login link to ${email}.`,
 
-    // New post
     whatToShare: "What do you want to share?",
-    askQuestion: "Ask a question",
-    createEvent: "Create event",
+    typeEvent: "🗓 Event",
+    typeQuestion: "❓ Question",
+    typeListing: "🏷 Listing",
+    typeAnnouncement: "📢 Announcement",
+
+    titleLabel: "Title",
     questionLabel: "What's your question?",
     eventTitleLabel: "Event title",
+    listingTitlePlaceholder: "e.g. Surfboard for sale",
+    announcementTitlePlaceholder: "e.g. Free yoga class this Sunday",
     questionPlaceholder: "e.g. Where is the best exchange office?",
     eventTitlePlaceholder: "e.g. Anyone up for diving tonight?",
     details: "Details (optional)",
     category: "Category",
     dateTime: "Date and time",
-    location: "Location",
+    locationLabel: "Location (tap map to pin)",
     locationPlaceholder: "e.g. Hon Mun island, boat pier",
+    priceLabel: "Price",
+    conditionLabel: "Condition",
+    conditionNew: "New",
+    conditionUsed: "Used",
+    photosLabel: "Photos (required)",
     postBtn: "Share",
+    uploading: "Uploading...",
     mustLogin: "You must log in first.",
 
-    // Post detail
+    filterAll: "All",
+    filterEvents: "Events",
+    filterQuestions: "Questions",
+    filterListings: "Listings",
+    filterAnnouncements: "Announcements",
+
     eventBadge: "Event",
     questionBadge: "Question",
+    listingBadge: "Listing",
+    announcementBadge: "Announcement",
+
     peopleAttending: "people attending",
     joined: "Joined",
     join: "Join",
@@ -47,8 +63,11 @@ export const translations = {
     answerBtn: "Answer",
     loading: "Loading...",
     notFound: "Content not found.",
+    statusOpen: "Open",
+    statusAnswered: "Answered",
+    markAnswered: "Mark as answered",
+    viewOnMap: "View on map",
 
-    // Profile setup
     setupProfile: "Set up your profile",
     nameLabel: "Name",
     bioLabel: "Short bio",
@@ -58,10 +77,8 @@ export const translations = {
     interests: "Your interests",
     saveAndGo: "Save and go to feed",
 
-    // Interests
     interestOptions: ["Diving", "Beach", "Nightlife", "Yoga", "Language practice", "Food"],
 
-    // Question categories
     categories: [
       { value: "money", label: "Money / exchange" },
       { value: "shopping", label: "Shopping" },
@@ -71,7 +88,6 @@ export const translations = {
       { value: "other", label: "Other" },
     ],
 
-    // Event categories
     eventCategories: [
       { value: "party", label: "🎉 Party" },
       { value: "trip", label: "🚤 Day trip / boat tour" },
@@ -85,47 +101,62 @@ export const translations = {
       { value: "other", label: "📌 Other" },
     ],
 
-    // PostCard
     participant: "participants",
     answerCount: "answers",
   },
 
   ru: {
-    // Header
     share: "+ Поделиться",
     login: "Войти",
 
-    // Feed
     loadingFeed: "Загрузка...",
     noPosts: "Публикаций пока нет.",
     noPostsHint: "Поделитесь первым событием или вопросом.",
 
-    // Login
     signIn: "Войти",
     emailPlaceholder: "email@example.com",
     sendLoginLink: "Отправить ссылку",
     checkEmail: "Проверьте почту",
     checkEmailHint: (email: string) => `Мы отправили ссылку для входа на ${email}.`,
 
-    // New post
     whatToShare: "Чем хотите поделиться?",
-    askQuestion: "Задать вопрос",
-    createEvent: "Создать событие",
+    typeEvent: "🗓 Событие",
+    typeQuestion: "❓ Вопрос",
+    typeListing: "🏷 Объявление",
+    typeAnnouncement: "📢 Анонс",
+
+    titleLabel: "Заголовок",
     questionLabel: "Ваш вопрос?",
     eventTitleLabel: "Название события",
+    listingTitlePlaceholder: "Напр.: Продаю сёрфборд",
+    announcementTitlePlaceholder: "Напр.: Бесплатная йога в воскресенье",
     questionPlaceholder: "Напр.: Где лучший обменник?",
     eventTitlePlaceholder: "Напр.: Кто хочет нырять сегодня вечером?",
     details: "Детали (необязательно)",
     category: "Категория",
     dateTime: "Дата и время",
-    location: "Место",
+    locationLabel: "Место (нажмите на карту)",
     locationPlaceholder: "Напр.: остров Хон Мун, пирс",
+    priceLabel: "Цена",
+    conditionLabel: "Состояние",
+    conditionNew: "Новое",
+    conditionUsed: "Б/у",
+    photosLabel: "Фото (обязательно)",
     postBtn: "Поделиться",
+    uploading: "Загрузка...",
     mustLogin: "Сначала войдите в систему.",
 
-    // Post detail
+    filterAll: "Все",
+    filterEvents: "События",
+    filterQuestions: "Вопросы",
+    filterListings: "Объявления",
+    filterAnnouncements: "Анонсы",
+
     eventBadge: "Событие",
     questionBadge: "Вопрос",
+    listingBadge: "Объявление",
+    announcementBadge: "Анонс",
+
     peopleAttending: "участников",
     joined: "Вы участвуете",
     join: "Присоединиться",
@@ -136,8 +167,11 @@ export const translations = {
     answerBtn: "Ответить",
     loading: "Загрузка...",
     notFound: "Контент не найден.",
+    statusOpen: "Открыт",
+    statusAnswered: "Отвечен",
+    markAnswered: "Отметить как отвеченный",
+    viewOnMap: "Показать на карте",
 
-    // Profile setup
     setupProfile: "Настройте профиль",
     nameLabel: "Имя",
     bioLabel: "Краткое описание",
@@ -147,10 +181,8 @@ export const translations = {
     interests: "Ваши интересы",
     saveAndGo: "Сохранить и перейти",
 
-    // Interests
     interestOptions: ["Дайвинг", "Пляж", "Ночная жизнь", "Йога", "Языковая практика", "Еда"],
 
-    // Question categories
     categories: [
       { value: "money", label: "Деньги / обмен" },
       { value: "shopping", label: "Шопинг" },
@@ -160,7 +192,6 @@ export const translations = {
       { value: "other", label: "Другое" },
     ],
 
-    // Event categories
     eventCategories: [
       { value: "party", label: "🎉 Вечеринка" },
       { value: "trip", label: "🚤 Поездка / морская прогулка" },
@@ -174,7 +205,6 @@ export const translations = {
       { value: "other", label: "📌 Другое" },
     ],
 
-    // PostCard
     participant: "участников",
     answerCount: "ответов",
   },

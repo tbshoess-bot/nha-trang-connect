@@ -1,5 +1,5 @@
 export type UserType = "tourist" | "expat";
-export type PostType = "event" | "question";
+export type PostType = "event" | "question" | "listing" | "announcement";
 
 export interface Profile {
   id: string;
@@ -19,8 +19,14 @@ export interface Post {
   category: string | null;
   event_date: string | null;
   location: string | null;
+  lat: number | null;
+  lng: number | null;
+  address: string | null;
+  price: number | null;
+  condition: "new" | "used" | null;
+  images: string[];
+  is_answered: boolean;
   created_at: string;
-  // join ile gelebilecek alanlar
   author?: Profile;
   participant_count?: number;
   answer_count?: number;
