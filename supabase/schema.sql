@@ -1,4 +1,4 @@
--- Nha Trang Connect — MVP veritabanı şeması
+-- Sri Lanka Connect — MVP veritabanı şeması
 -- Supabase SQL Editor'a yapıştırıp çalıştır.
 
 create extension if not exists "pgcrypto";

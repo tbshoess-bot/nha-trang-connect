@@ -1,6 +1,6 @@
-# Nha Trang Connect — MVP
+# Sri Lanka Connect — MVP
 
-Nha Trang'da turist, backpacker ve expat'ları aynı platformda buluşturan topluluk uygulaması.
+Sri Lanka'da turist, backpacker ve expat'ları aynı platformda buluşturan topluluk uygulaması.
 İki tip içerik: **etkinlik** (buluşma oluşturma, katılma) ve **soru** (yerel bilgi sorma/cevaplama).
 
 ## Kurulum (Claude Code'da çalıştırırken bu adımları takip et)

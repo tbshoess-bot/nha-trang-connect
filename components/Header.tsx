@@ -33,7 +33,7 @@ export default function Header() {
     <header className="border-b border-sand-300 bg-sand-50/95 backdrop-blur sticky top-0 z-10">
       <div className="max-w-2xl mx-auto px-4 h-14 flex items-center justify-between">
         <Link href="/" className="font-semibold text-sea-700 tracking-tight">
-          Nha Trang Connect
+          Sri Lanka Connect
         </Link>
         <nav className="flex items-center gap-3 text-sm">
           <div className="flex gap-1 text-xs">
