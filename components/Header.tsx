@@ -30,22 +30,30 @@ export default function Header() {
   const initials = user?.email?.slice(0, 2).toUpperCase() ?? "";
 
   return (
-    <header className="border-b border-sand-300 bg-sand-50/95 backdrop-blur sticky top-0 z-10">
-      <div className="max-w-2xl mx-auto px-4 h-14 flex items-center justify-between">
-        <Link href="/" className="font-semibold text-sea-700 tracking-tight">
-          Sri Lanka Connect
+    <header className="bg-crimson-500 shadow-md sticky top-0 z-10">
+      <div className="max-w-2xl mx-auto px-4 h-16 flex items-center justify-between">
+        <Link href="/" className="flex items-center gap-2">
+          <span className="text-2xl leading-none">🦁</span>
+          <span className="font-bold text-white tracking-tight text-[15px]">
+            Sri Lanka <span className="text-gold-300">Connect</span>
+          </span>
         </Link>
-        <nav className="flex items-center gap-3 text-sm">
-          <div className="flex gap-1 text-xs">
+
+        <nav className="flex items-center gap-2 text-sm">
+          <div className="flex gap-0.5 bg-crimson-700/50 rounded-full p-0.5">
             <button
               onClick={() => setLang("en")}
-              className={`px-2 py-1 rounded transition ${lang === "en" ? "bg-sea-500 text-white" : "text-ink-700/60 hover:text-sea-700"}`}
+              className={`px-2.5 py-1 rounded-full text-xs font-semibold transition ${
+                lang === "en" ? "bg-white text-crimson-700" : "text-white/70 hover:text-white"
+              }`}
             >
               EN
             </button>
             <button
               onClick={() => setLang("ru")}
-              className={`px-2 py-1 rounded transition ${lang === "ru" ? "bg-sea-500 text-white" : "text-ink-700/60 hover:text-sea-700"}`}
+              className={`px-2.5 py-1 rounded-full text-xs font-semibold transition ${
+                lang === "ru" ? "bg-white text-crimson-700" : "text-white/70 hover:text-white"
+              }`}
             >
               RU
             </button>
@@ -53,16 +61,19 @@ export default function Header() {
 
           {user ? (
             <>
-              <Link href="/post/new" className="px-3 py-1.5 rounded-full bg-sea-500 text-white hover:bg-sea-700 transition">
-                {t.share}
+              <Link
+                href="/post/new"
+                className="px-4 py-1.5 rounded-full bg-gold-400 text-ink-900 font-bold hover:bg-gold-300 transition text-sm shadow-sm"
+              >
+                + {t.share}
               </Link>
               <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-full bg-sea-500 text-white flex items-center justify-center text-xs font-semibold">
+                <div className="w-8 h-8 rounded-full bg-gold-400 text-ink-900 flex items-center justify-center text-xs font-bold border-2 border-gold-300">
                   {initials}
                 </div>
                 <button
                   onClick={handleSignOut}
-                  className="text-xs text-ink-700/60 hover:text-sunset-600 transition"
+                  className="text-xs text-white/60 hover:text-white transition hidden sm:block"
                 >
                   {lang === "en" ? "Sign out" : "Выйти"}
                 </button>
@@ -70,10 +81,13 @@ export default function Header() {
             </>
           ) : (
             <>
-              <Link href="/post/new" className="px-3 py-1.5 rounded-full bg-sea-500 text-white hover:bg-sea-700 transition">
-                {t.share}
+              <Link
+                href="/post/new"
+                className="px-4 py-1.5 rounded-full bg-gold-400 text-ink-900 font-bold hover:bg-gold-300 transition text-sm shadow-sm"
+              >
+                + {t.share}
               </Link>
-              <Link href="/login" className="text-ink-700 hover:text-sea-700">
+              <Link href="/login" className="text-white/80 hover:text-white text-sm font-medium">
                 {t.login}
               </Link>
             </>

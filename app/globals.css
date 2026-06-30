@@ -3,6 +3,10 @@
 @tailwind utilities;
 
 body {
-  background-color: theme("colors.sand.50");
+  background-color: theme("colors.cream.50");
   color: theme("colors.ink.900");
+}
+
+* {
+  -webkit-font-smoothing: antialiased;
 }

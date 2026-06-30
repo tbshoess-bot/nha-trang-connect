@@ -48,40 +48,43 @@ export default function ProfileSetupPage() {
 
   return (
     <div className="max-w-sm mx-auto py-8">
-      <h1 className="text-lg font-medium mb-4">{t.setupProfile}</h1>
+      <div className="text-center mb-6">
+        <span className="text-3xl">👋</span>
+        <h1 className="text-lg font-bold mt-2">{t.setupProfile}</h1>
+      </div>
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label className="text-sm text-ink-700/70">{t.nameLabel}</label>
+          <label className="text-sm font-medium text-ink-700/70">{t.nameLabel}</label>
           <input
             required
             value={fullName}
             onChange={(e) => setFullName(e.target.value)}
-            className="w-full mt-1 rounded-lg border border-sand-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sea-500"
+            className="w-full mt-1 rounded-xl border border-cream-300 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-crimson-500 bg-white"
           />
         </div>
 
         <div>
-          <label className="text-sm text-ink-700/70">{t.bioLabel}</label>
+          <label className="text-sm font-medium text-ink-700/70">{t.bioLabel}</label>
           <textarea
             value={bio}
             onChange={(e) => setBio(e.target.value)}
             rows={2}
-            className="w-full mt-1 rounded-lg border border-sand-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sea-500"
+            className="w-full mt-1 rounded-xl border border-cream-300 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-crimson-500 bg-white"
           />
         </div>
 
         <div>
-          <label className="text-sm text-ink-700/70">{t.whoAreYou}</label>
+          <label className="text-sm font-medium text-ink-700/70">{t.whoAreYou}</label>
           <div className="flex gap-2 mt-1">
             {(["tourist", "expat"] as UserType[]).map((type) => (
               <button
                 type="button"
                 key={type}
                 onClick={() => setUserType(type)}
-                className={`flex-1 rounded-lg border py-2 text-sm transition ${
+                className={`flex-1 rounded-xl border py-2.5 text-sm font-medium transition ${
                   userType === type
-                    ? "border-sea-500 bg-sea-500/10 text-sea-700"
-                    : "border-sand-300 text-ink-700/70"
+                    ? "border-crimson-500 bg-crimson-50 text-crimson-700"
+                    : "border-cream-300 text-ink-700/70 bg-white hover:border-crimson-200"
                 }`}
               >
                 {type === "tourist" ? t.tourist : t.expat}
@@ -91,17 +94,17 @@ export default function ProfileSetupPage() {
         </div>
 
         <div>
-          <label className="text-sm text-ink-700/70">{t.interests}</label>
+          <label className="text-sm font-medium text-ink-700/70">{t.interests}</label>
           <div className="flex flex-wrap gap-2 mt-1">
             {t.interestOptions.map((interest) => (
               <button
                 type="button"
                 key={interest}
                 onClick={() => toggleInterest(interest)}
-                className={`px-3 py-1 rounded-full text-sm border transition ${
+                className={`px-3 py-1 rounded-full text-sm border font-medium transition ${
                   interests.includes(interest)
-                    ? "border-sea-500 bg-sea-500/10 text-sea-700"
-                    : "border-sand-300 text-ink-700/70"
+                    ? "border-crimson-500 bg-crimson-50 text-crimson-700"
+                    : "border-cream-300 text-ink-700/70 bg-white hover:border-crimson-200"
                 }`}
               >
                 {interest}
@@ -112,11 +115,11 @@ export default function ProfileSetupPage() {
 
         <button
           type="submit"
-          className="w-full rounded-lg bg-sea-500 text-white py-2 text-sm font-medium hover:bg-sea-700 transition"
+          className="w-full rounded-xl bg-crimson-500 text-white py-3 text-sm font-bold hover:bg-crimson-700 transition shadow-sm"
         >
           {t.saveAndGo}
         </button>
-        {error && <p className="text-sm text-sunset-600">{error}</p>}
+        {error && <p className="text-sm text-red-600">{error}</p>}
       </form>
     </div>
   );
