@@ -34,8 +34,8 @@ export default function MapPicker({ lat, lng, address, onChange }: Props) {
       });
 
       const map = L.map(containerRef.current, {
-        center: [12.2388, 109.1967],
-        zoom: 13,
+        center: [7.8731, 80.7718],
+        zoom: 8,
       });
 
       L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
