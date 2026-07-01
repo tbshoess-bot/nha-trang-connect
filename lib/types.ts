@@ -1,5 +1,6 @@
 export type UserType = "tourist" | "expat";
 export type PostType = "event" | "question" | "listing" | "announcement";
+export type ListingType = "item" | "service";
 
 export interface Profile {
   id: string;
@@ -26,6 +27,9 @@ export interface Post {
   condition: "new" | "used" | null;
   images: string[];
   is_answered: boolean;
+  listing_type: ListingType | null;
+  contact_phone: string | null;
+  website: string | null;
   created_at: string;
   author?: Profile;
   participant_count?: number;
@@ -48,15 +52,4 @@ export interface Answer {
   author?: Profile;
 }
 
-// Supabase generic client tipi için minimal placeholder.
-// Gerçek projede `supabase gen types typescript` ile otomatik üretilebilir.
 export type Database = any;
-
-export const CATEGORIES = [
-  { value: "para", label: "Para / exchange" },
-  { value: "alisveris", label: "Alışveriş" },
-  { value: "saglik", label: "Sağlık" },
-  { value: "ulasim", label: "Ulaşım" },
-  { value: "eglence", label: "Eğlence" },
-  { value: "diger", label: "Diğer" },
-];

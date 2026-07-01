@@ -277,28 +277,17 @@ export default function PostDetailPage() {
         </div>
       )}
 
-      {/* LISTING */}
-      {post.type === "listing" && (
+      {/* LISTING — ITEM FOR SALE */}
+      {post.type === "listing" && post.listing_type !== "service" && (
         <div className="rounded-2xl border border-cream-300 bg-white p-5 space-y-3 shadow-card">
           {post.images?.length > 0 && (
             <div className="space-y-2">
-              <img
-                src={post.images[imgIndex]}
-                alt=""
-                className="w-full rounded-xl object-cover border border-cream-300"
-                style={{ maxHeight: 280 }}
-              />
+              <img src={post.images[imgIndex]} alt="" className="w-full rounded-xl object-cover border border-cream-300" style={{ maxHeight: 280 }} />
               {post.images.length > 1 && (
                 <div className="flex gap-2 overflow-x-auto">
                   {post.images.map((img, i) => (
-                    <img
-                      key={i}
-                      src={img}
-                      alt=""
-                      onClick={() => setImgIndex(i)}
-                      className={`w-14 h-14 rounded-lg object-cover cursor-pointer border-2 transition ${
-                        i === imgIndex ? "border-crimson-500" : "border-cream-300"
-                      }`}
+                    <img key={i} src={img} alt="" onClick={() => setImgIndex(i)}
+                      className={`w-14 h-14 rounded-lg object-cover cursor-pointer border-2 transition ${i === imgIndex ? "border-crimson-500" : "border-cream-300"}`}
                     />
                   ))}
                 </div>
@@ -306,13 +295,78 @@ export default function PostDetailPage() {
             </div>
           )}
           <div className="flex items-center gap-3">
-            {post.price != null && (
-              <span className="text-2xl font-bold text-ink-900">${post.price}</span>
-            )}
+            {post.price != null && <span className="text-2xl font-bold text-ink-900">${post.price}</span>}
             {post.condition && (
               <span className="text-sm px-3 py-0.5 rounded-full bg-cream-100 text-ink-700/70 border border-cream-300">
                 {post.condition === "new" ? t.conditionNew : t.conditionUsed}
               </span>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* LISTING — SERVICE / BUSINESS */}
+      {post.type === "listing" && post.listing_type === "service" && (
+        <div className="rounded-2xl border border-cream-300 bg-white p-5 space-y-4 shadow-card">
+          {post.images?.length > 0 && (
+            <div className="space-y-2">
+              <img src={post.images[imgIndex]} alt="" className="w-full rounded-xl object-cover border border-cream-300" style={{ maxHeight: 240 }} />
+              {post.images.length > 1 && (
+                <div className="flex gap-2 overflow-x-auto">
+                  {post.images.map((img, i) => (
+                    <img key={i} src={img} alt="" onClick={() => setImgIndex(i)}
+                      className={`w-14 h-14 rounded-lg object-cover cursor-pointer border-2 transition ${i === imgIndex ? "border-crimson-500" : "border-cream-300"}`}
+                    />
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+
+          {(post.address || post.location) && (
+            <div className="space-y-2">
+              <p className="text-sm text-ink-700/70 flex items-center gap-2">
+                <span>📍</span>{post.address || post.location}
+              </p>
+              {post.lat && post.lng && (
+                <div className="rounded-xl overflow-hidden border border-cream-300" style={{ height: 160 }}>
+                  <MapPicker lat={post.lat} lng={post.lng} address="" onChange={() => {}} />
+                </div>
+              )}
+            </div>
+          )}
+
+          <div className="space-y-2 pt-1">
+            {post.contact_phone && (
+              <a
+                href={`https://wa.me/${post.contact_phone.replace(/\D/g, "")}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center justify-center gap-2 w-full rounded-xl bg-[#25D366] text-white py-3 font-bold text-sm hover:opacity-90 transition shadow-sm"
+              >
+                <span className="text-lg">💬</span>
+                {t.whatsapp}
+              </a>
+            )}
+            {post.contact_phone && (
+              <a
+                href={`tel:${post.contact_phone.replace(/\s/g, "")}`}
+                className="flex items-center justify-center gap-2 w-full rounded-xl border border-cream-300 bg-white text-ink-900 py-3 font-semibold text-sm hover:border-crimson-300 transition"
+              >
+                <span>📞</span>
+                {t.callPhone}
+              </a>
+            )}
+            {post.website && (
+              <a
+                href={post.website}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center justify-center gap-2 w-full rounded-xl border border-cream-300 bg-white text-crimson-700 py-3 font-semibold text-sm hover:border-crimson-300 transition"
+              >
+                <span>🌐</span>
+                {t.visitWebsite}
+              </a>
             )}
           </div>
         </div>
