@@ -2,11 +2,17 @@ import { Resend } from "resend";
 import webpush from "web-push";
 import { supabaseAdmin } from "./supabase-admin";
 
-webpush.setVapidDetails(
-  process.env.VAPID_EMAIL!,
-  process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY!,
-  process.env.VAPID_PRIVATE_KEY!
-);
+let vapidConfigured = false;
+function ensureVapid() {
+  if (vapidConfigured) return;
+  const subject = process.env.VAPID_EMAIL || "";
+  const pub = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY || "";
+  const priv = process.env.VAPID_PRIVATE_KEY || "";
+  if (subject && pub && priv) {
+    webpush.setVapidDetails(subject, pub, priv);
+    vapidConfigured = true;
+  }
+}
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -57,6 +63,7 @@ export async function notifyUser({
     }
 
     // Send push notifications
+    ensureVapid();
     const pushPayload = JSON.stringify({ title, body, url: `${APP_URL}${url}` });
     await Promise.allSettled(
       subs.map((sub) =>
