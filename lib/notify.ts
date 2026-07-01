@@ -14,8 +14,6 @@ function ensureVapid() {
   }
 }
 
-const resend = new Resend(process.env.RESEND_API_KEY);
-
 const APP_URL = process.env.NEXT_PUBLIC_APP_URL || "https://nha-trang-connect-ymm8.vercel.app";
 
 export async function notifyUser({
@@ -29,6 +27,7 @@ export async function notifyUser({
   body: string;
   url: string;
 }) {
+  const resend = new Resend(process.env.RESEND_API_KEY);
   try {
     // Get recipient email + push subscriptions
     const [profileResult, subsResult] = await Promise.all([
