@@ -132,11 +132,11 @@ export default function NewPostPage() {
       <div className="grid grid-cols-2 gap-2 mb-6">
         {POST_TYPES.map((pt) => (
           <button key={pt} type="button" onClick={() => handleTypeChange(pt)}
-            className={`rounded-xl border py-2.5 text-sm font-medium transition flex items-center justify-center gap-2 ${
+            className={`rounded-xl border py-2.5 text-sm font-medium transition ${
               type === pt ? "border-crimson-500 bg-crimson-50 text-crimson-700" : "border-cream-300 text-ink-700/70 bg-white hover:border-crimson-200"
             }`}
           >
-            <span>{TYPE_ICONS[pt]}</span>{typeLabels[pt]}
+            {typeLabels[pt]}
           </button>
         ))}
       </div>
