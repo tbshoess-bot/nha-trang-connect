@@ -80,10 +80,23 @@ export default function PostDetailPage() {
   async function handleJoin() {
     const { data: userData } = await supabase.auth.getUser();
     const user = userData?.user;
-    if (!user) return;
+    if (!user || !post) return;
     await supabase.from("event_participants").insert({ post_id: params.id, user_id: user.id });
     setJoined(true);
     setParticipantCount((c) => c + 1);
+    // Notify event author
+    if (post.author_id !== user.id) {
+      fetch("/api/notify", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          recipientUserId: post.author_id,
+          title: "Someone joined your event! 🎉",
+          body: `A new person is attending: ${post.title}`,
+          url: `/post/${params.id}`,
+        }),
+      });
+    }
   }
 
   async function handleAnswerSubmit(e: React.FormEvent) {
@@ -96,7 +109,23 @@ export default function PostDetailPage() {
       .insert({ post_id: params.id, author_id: user.id, content: newAnswer })
       .select()
       .single();
-    if (data) { setAnswers((prev) => [...prev, data as Answer]); setNewAnswer(""); }
+    if (data) {
+      setAnswers((prev) => [...prev, data as Answer]);
+      setNewAnswer("");
+      // Notify question author
+      if (post && post.author_id !== user.id) {
+        fetch("/api/notify", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            recipientUserId: post.author_id,
+            title: "Your question got an answer! 💬",
+            body: `New answer on: ${post.title}`,
+            url: `/post/${params.id}`,
+          }),
+        });
+      }
+    }
   }
 
   async function handleMarkBest(answerId: string) {

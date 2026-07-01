@@ -40,6 +40,7 @@ export default function ProfileSetupPage() {
       bio,
       user_type: userType,
       interests,
+      email: user.email,
     });
 
     if (error) setError(error.message);
