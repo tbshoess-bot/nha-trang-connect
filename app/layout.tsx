@@ -94,7 +94,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         {/* Google Translate: plain <script> tags bypass Next.js Script deduplication */}
         <script
           dangerouslySetInnerHTML={{
-            __html: `window.googleTranslateElementInit=function(){new google.translate.TranslateElement({pageLanguage:'en',includedLanguages:'ru,uk,de,fr,zh-CN,ar,es,it,ja,ko,tr,pl',layout:google.translate.TranslateElement.InlineLayout.SIMPLE,autoDisplay:false},'google_translate_element');};`,
+            __html: `window.googleTranslateElementInit=function(){new google.translate.TranslateElement({pageLanguage:'en',includedLanguages:'ru,uk,de,fr,zh-CN,ar,es,it,ja,ko,tr,pl',layout:google.translate.TranslateElement.InlineLayout.SIMPLE,autoDisplay:false},'google_translate_element');(function addGlobe(n){var b=document.querySelector('#google_translate_element .goog-te-gadget-simple');if(b&&!b.querySelector('.gt-globe')){var g=document.createElement('span');g.className='gt-globe';g.textContent='\u{1F310} ';g.style.cssText='font-size:13px;line-height:1;flex-shrink:0;';b.insertBefore(g,b.firstChild);}else if(n>0){setTimeout(function(){addGlobe(n-1);},300);};})(20);};`,
           }}
         />
         <script
