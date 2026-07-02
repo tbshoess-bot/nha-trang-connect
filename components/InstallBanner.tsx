@@ -8,16 +8,15 @@ export default function InstallBanner() {
   const [deferredPrompt, setDeferredPrompt] = useState<Event & { prompt: () => void } | null>(null);
 
   useEffect(() => {
-    // Don't show if already installed (standalone mode)
     if (window.matchMedia("(display-mode: standalone)").matches) return;
-    // Don't show if dismissed
     if (localStorage.getItem("installDismissed")) return;
 
-    const ios = /iphone|ipad|ipod/i.test(navigator.userAgent) && !(window.navigator as { standalone?: boolean }).standalone;
+    const ios = /iphone|ipad|ipod/i.test(navigator.userAgent) &&
+      !(window.navigator as { standalone?: boolean }).standalone;
     setIsIOS(ios);
 
     if (ios) {
-      setShow(true);
+      setTimeout(() => setShow(true), 1500);
       return;
     }
 
@@ -44,36 +43,52 @@ export default function InstallBanner() {
   if (!show) return null;
 
   return (
-    <div className="fixed bottom-4 left-4 right-4 z-50 max-w-sm mx-auto">
-      <div className="bg-ink-900 text-white rounded-2xl p-4 shadow-xl flex gap-3 items-start">
-        <span className="text-3xl leading-none shrink-0">🦁</span>
-        <div className="flex-1 min-w-0">
-          <p className="font-bold text-sm leading-tight">Add to Home Screen</p>
-          {isIOS ? (
-            <p className="text-xs text-white/70 mt-0.5 leading-snug">
-              Tap <span className="inline-block bg-white/20 rounded px-1">Share</span> then <strong>"Add to Home Screen"</strong> to install the app
-            </p>
-          ) : (
-            <p className="text-xs text-white/70 mt-0.5">Install for faster access</p>
-          )}
-        </div>
-        <div className="flex flex-col gap-1.5 shrink-0">
-          {!isIOS && (
+    <>
+      {/* Backdrop to catch taps */}
+      <div
+        className="fixed inset-0 z-[9998]"
+        onClick={dismiss}
+        style={{ background: "transparent" }}
+      />
+      <div
+        className="fixed left-4 right-4 z-[9999] max-w-sm mx-auto"
+        style={{ bottom: "env(safe-area-inset-bottom, 16px)", marginBottom: 16 }}
+      >
+        <div className="bg-ink-900 text-white rounded-2xl p-4 shadow-2xl">
+          <div className="flex gap-3 items-center mb-3">
+            <span className="text-3xl leading-none shrink-0">🦁</span>
+            <div>
+              <p className="font-bold text-sm">Add to Home Screen</p>
+              {isIOS ? (
+                <p className="text-xs text-white/70 mt-0.5 leading-snug">
+                  Tap <strong>Share</strong> (box with arrow ↑) then <strong>"Add to Home Screen"</strong>
+                </p>
+              ) : (
+                <p className="text-xs text-white/70 mt-0.5">Install for faster access</p>
+              )}
+            </div>
+          </div>
+
+          <div className="flex gap-2">
+            {!isIOS && (
+              <button
+                onClick={install}
+                className="flex-1 bg-gold-400 text-ink-900 text-sm font-bold py-2.5 rounded-xl"
+                style={{ WebkitTapHighlightColor: "transparent" }}
+              >
+                Install app
+              </button>
+            )}
             <button
-              onClick={install}
-              className="bg-gold-400 text-ink-900 text-xs font-bold px-3 py-1.5 rounded-lg"
+              onClick={dismiss}
+              className="flex-1 bg-white/15 text-white text-sm font-medium py-2.5 rounded-xl"
+              style={{ WebkitTapHighlightColor: "transparent" }}
             >
-              Install
+              {isIOS ? "Got it" : "Not now"}
             </button>
-          )}
-          <button
-            onClick={dismiss}
-            className="text-white/50 text-xs hover:text-white/80 transition text-right"
-          >
-            Not now
-          </button>
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }
