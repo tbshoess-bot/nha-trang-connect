@@ -3,6 +3,7 @@ import Script from "next/script";
 import "./globals.css";
 import Header from "@/components/Header";
 import PushNotifications from "@/components/PushNotifications";
+import InstallBanner from "@/components/InstallBanner";
 import { LanguageProvider } from "@/lib/LanguageContext";
 
 export const metadata: Metadata = {
@@ -60,6 +61,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <Header />
           <main className="max-w-2xl mx-auto px-4 py-5">{children}</main>
           <PushNotifications />
+          <InstallBanner />
         </LanguageProvider>
         <Script id="gt-init" strategy="afterInteractive">{`
           function googleTranslateElementInit() {

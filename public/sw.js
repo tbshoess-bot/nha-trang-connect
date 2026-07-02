@@ -1,3 +1,8 @@
+// Minimal fetch handler — required for Chrome PWA install prompt
+self.addEventListener('fetch', (event) => {
+  event.respondWith(fetch(event.request));
+});
+
 self.addEventListener('push', (event) => {
   const data = event.data?.json() ?? {};
   const title = data.title || 'Sri Lanka Connect';
