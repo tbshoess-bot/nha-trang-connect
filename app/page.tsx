@@ -58,14 +58,38 @@ export default function FeedPage() {
   return (
     <div className="space-y-4">
       {/* Hero */}
-      <div className="rounded-2xl bg-gradient-to-br from-crimson-500 to-crimson-700 p-5 text-white shadow-card">
-        <div className="flex items-center gap-2 mb-1">
-          <span className="text-xl">🌴</span>
-          <h1 className="text-base font-bold tracking-tight">Sri Lanka Community</h1>
+      <div className="rounded-2xl overflow-hidden relative bg-gradient-to-br from-crimson-700 via-crimson-600 to-crimson-500 shadow-card">
+        {/* Decorative blobs */}
+        <div className="absolute -top-8 -right-8 w-36 h-36 rounded-full bg-white/5 pointer-events-none" />
+        <div className="absolute -bottom-6 -left-6 w-28 h-28 rounded-full bg-gold-400/10 pointer-events-none" />
+
+        <div className="relative p-5 text-white">
+          <div className="flex items-start justify-between">
+            <div>
+              <h1 className="text-2xl font-bold tracking-tight leading-tight">
+                Sri Lanka <span className="text-gold-300">Connect</span>
+              </h1>
+              <p className="text-sm text-crimson-100 mt-1 leading-snug max-w-[220px]">
+                Travelers, backpackers &amp; expats — all in one place
+              </p>
+            </div>
+            <span className="text-5xl leading-none -mt-1 select-none">🦁</span>
+          </div>
+
+          {/* Live stats */}
+          <div className="flex gap-2 mt-4">
+            {[
+              { count: posts.filter((p) => p.type === "event").length, label: "upcoming events" },
+              { count: posts.filter((p) => p.type === "listing").length, label: "listings" },
+              { count: posts.filter((p) => p.type === "question").length, label: "questions" },
+            ].map(({ count, label }) => (
+              <div key={label} className="flex-1 bg-white/15 rounded-xl py-2.5 px-1 text-center">
+                <div className="text-xl font-bold leading-none">{loading ? "—" : count}</div>
+                <div className="text-[10px] text-crimson-100 mt-1 leading-tight">{label}</div>
+              </div>
+            ))}
+          </div>
         </div>
-        <p className="text-sm text-crimson-100 leading-relaxed">
-          Find events, ask questions, meet fellow travelers &amp; expats
-        </p>
       </div>
 
       {/* Category filters */}
