@@ -16,6 +16,11 @@ export const metadata: Metadata = {
     type: "website",
   },
   manifest: "/manifest.json",
+  icons: {
+    icon: [{ url: "/icon-192.png", type: "image/png" }],
+    shortcut: "/icon-192.png",
+    apple: "/icon-192.png",
+  },
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
@@ -34,23 +39,56 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <head>
-        <link rel="apple-touch-icon" href="/icon-192.png" />
         <style>{`
-          /* Compact Google Translate widget */
+          /* ── Google Translate widget ── */
+          #google_translate_element {
+            display: flex !important;
+            align-items: center !important;
+            overflow: hidden !important;
+          }
           #google_translate_element .goog-te-gadget-simple {
             background: transparent !important;
-            border: 1px solid rgba(255,255,255,0.4) !important;
+            border: 1px solid rgba(255,255,255,0.35) !important;
             border-radius: 20px !important;
-            padding: 3px 10px !important;
+            padding: 4px 10px 4px 8px !important;
             font-size: 12px !important;
+            line-height: 1 !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            white-space: nowrap !important;
+            cursor: pointer !important;
           }
-          #google_translate_element .goog-te-gadget-simple span,
+          #google_translate_element .goog-te-gadget-simple img {
+            display: none !important;
+          }
           #google_translate_element .goog-te-gadget-simple a {
             color: white !important;
             text-decoration: none !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            gap: 3px !important;
+          }
+          #google_translate_element .goog-te-gadget-simple .goog-te-menu-value {
+            display: inline-flex !important;
+            align-items: center !important;
+            gap: 2px !important;
           }
           #google_translate_element .goog-te-gadget-simple .goog-te-menu-value span {
             color: white !important;
+          }
+          /* Hide the | pipe separator */
+          #google_translate_element .goog-te-gadget-simple .goog-te-menu-value > span:nth-child(2) {
+            display: none !important;
+          }
+          /* Add globe icon before language text */
+          #google_translate_element .goog-te-gadget-simple .goog-te-menu-value > span:first-child::before {
+            content: "🌐 ";
+          }
+          /* Style the ▼ arrow */
+          #google_translate_element .goog-te-gadget-simple .goog-te-menu-value > span:last-child {
+            font-size: 9px !important;
+            opacity: 0.6 !important;
+            margin-left: 2px !important;
           }
           .goog-te-banner-frame { display: none !important; }
           body { top: 0 !important; }
