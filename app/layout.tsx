@@ -101,10 +101,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             }, 'google_translate_element');
           };
         `}</Script>
-        <Script
-          src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"
-          strategy="afterInteractive"
-        />
+        <Script id="gt-load" strategy="afterInteractive">{`
+          (function() {
+            if (document.querySelector('script[src*="translate.google.com"]')) return;
+            var s = document.createElement('script');
+            s.src = 'https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
+            document.head.appendChild(s);
+          })();
+        `}</Script>
       </body>
     </html>
   );
