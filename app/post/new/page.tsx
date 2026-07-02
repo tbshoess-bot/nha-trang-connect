@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
 import { supabase } from "@/lib/supabase";
 import { type PostType, type ListingType } from "@/lib/types";
-import { useLanguage } from "@/lib/LanguageContext";
 import { translations } from "@/lib/translations";
 
 const MapPicker = dynamic(() => import("@/components/MapPicker"), { ssr: false });
@@ -17,8 +16,7 @@ const TYPE_ICONS: Record<PostType, string> = {
 
 export default function NewPostPage() {
   const router = useRouter();
-  const { lang } = useLanguage();
-  const t = translations[lang];
+  const t = translations["en"];
 
   const [type, setType] = useState<PostType>("event");
   const [listingType, setListingType] = useState<ListingType>("item");
@@ -72,7 +70,7 @@ export default function NewPostPage() {
     if (!user) { setError(t.mustLogin); return; }
 
     if (type === "listing" && listingType === "item" && images.length === 0) {
-      setError(lang === "en" ? "Please add at least one photo." : "Добавьте хотя бы одно фото.");
+      setError("Please add at least one photo.");
       return;
     }
 
@@ -191,16 +189,16 @@ export default function NewPostPage() {
             <div>
               <label className={labelClass}>{t.dateTime}</label>
               <div className="grid grid-cols-3 gap-2 mt-1">
-                <input type="number" min="1" max="31" placeholder={lang === "en" ? "Day" : "День"} value={eventDay} onChange={(e) => setEventDay(e.target.value)} required className="rounded-xl border border-cream-300 px-3 py-2.5 text-sm text-center focus:outline-none focus:ring-2 focus:ring-crimson-500 bg-white" />
+                <input type="number" min="1" max="31" placeholder="Day" value={eventDay} onChange={(e) => setEventDay(e.target.value)} required className="rounded-xl border border-cream-300 px-3 py-2.5 text-sm text-center focus:outline-none focus:ring-2 focus:ring-crimson-500 bg-white" />
                 <select value={eventMonth} onChange={(e) => setEventMonth(e.target.value)} required className="rounded-xl border border-cream-300 px-2 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-crimson-500 bg-white">
-                  <option value="">{lang === "en" ? "Month" : "Месяц"}</option>
-                  {(lang === "en" ? ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"] : ["Янв","Фев","Мар","Апр","Май","Июн","Июл","Авг","Сен","Окт","Ноя","Дек"]).map((m, i) => <option key={i+1} value={String(i+1)}>{m}</option>)}
+                  <option value="">Month</option>
+                  {["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"].map((m, i) => <option key={i+1} value={String(i+1)}>{m}</option>)}
                 </select>
-                <input type="number" min="2024" max="2030" placeholder={lang === "en" ? "Year" : "Год"} value={eventYear} onChange={(e) => setEventYear(e.target.value)} required className="rounded-xl border border-cream-300 px-3 py-2.5 text-sm text-center focus:outline-none focus:ring-2 focus:ring-crimson-500 bg-white" />
+                <input type="number" min="2024" max="2030" placeholder="Year" value={eventYear} onChange={(e) => setEventYear(e.target.value)} required className="rounded-xl border border-cream-300 px-3 py-2.5 text-sm text-center focus:outline-none focus:ring-2 focus:ring-crimson-500 bg-white" />
               </div>
               <div className="grid grid-cols-2 gap-2 mt-2">
                 <select value={eventHour} onChange={(e) => setEventHour(e.target.value)} className="rounded-xl border border-cream-300 px-2 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-crimson-500 bg-white">
-                  <option value="">{lang === "en" ? "Hour" : "Час"}</option>
+                  <option value="">Hour</option>
                   {Array.from({length: 24}, (_, i) => <option key={i} value={String(i)}>{String(i).padStart(2,"0")}:00</option>)}
                 </select>
                 <select value={eventMinute} onChange={(e) => setEventMinute(e.target.value)} className="rounded-xl border border-cream-300 px-2 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-crimson-500 bg-white">

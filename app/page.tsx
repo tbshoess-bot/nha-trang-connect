@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import type { Post, PostType } from "@/lib/types";
 import PostCard from "@/components/PostCard";
-import { useLanguage } from "@/lib/LanguageContext";
 import { translations } from "@/lib/translations";
 
 type FilterType = "all" | PostType;
@@ -19,8 +18,7 @@ const FILTER_ICONS: Record<FilterType, string> = {
 };
 
 export default function FeedPage() {
-  const { lang } = useLanguage();
-  const t = translations[lang];
+  const t = translations["en"];
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<FilterType>("all");
@@ -63,14 +61,10 @@ export default function FeedPage() {
       <div className="rounded-2xl bg-gradient-to-br from-crimson-500 to-crimson-700 p-5 text-white shadow-card">
         <div className="flex items-center gap-2 mb-1">
           <span className="text-xl">🌴</span>
-          <h1 className="text-base font-bold tracking-tight">
-            {lang === "en" ? "Sri Lanka Community" : "Сообщество Шри-Ланки"}
-          </h1>
+          <h1 className="text-base font-bold tracking-tight">Sri Lanka Community</h1>
         </div>
         <p className="text-sm text-crimson-100 leading-relaxed">
-          {lang === "en"
-            ? "Find events, ask questions, meet fellow travelers & expats"
-            : "Мероприятия, вопросы, знакомства с путешественниками и экспатами"}
+          Find events, ask questions, meet fellow travelers &amp; expats
         </p>
       </div>
 

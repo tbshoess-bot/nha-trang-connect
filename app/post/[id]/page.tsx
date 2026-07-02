@@ -5,7 +5,6 @@ import { useParams, useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
 import { supabase } from "@/lib/supabase";
 import type { Post, Answer, PostType } from "@/lib/types";
-import { useLanguage } from "@/lib/LanguageContext";
 import { translations } from "@/lib/translations";
 
 const MapPicker = dynamic(() => import("@/components/MapPicker"), { ssr: false });
@@ -20,8 +19,7 @@ const BADGE: Record<PostType, string> = {
 export default function PostDetailPage() {
   const params = useParams<{ id: string }>();
   const router = useRouter();
-  const { lang } = useLanguage();
-  const t = translations[lang];
+  const t = translations["en"];
   const [post, setPost] = useState<Post | null>(null);
   const [answers, setAnswers] = useState<Answer[]>([]);
   const [participantCount, setParticipantCount] = useState(0);
@@ -141,7 +139,7 @@ export default function PostDetailPage() {
   }
 
   async function handleDelete() {
-    const confirmed = window.confirm(lang === "en" ? "Delete this post?" : "Удалить эту публикацию?");
+    const confirmed = window.confirm("Delete this post?");
     if (!confirmed) return;
     await supabase.from("posts").delete().eq("id", params.id);
     router.push("/");
@@ -161,7 +159,7 @@ export default function PostDetailPage() {
   if (!post) return <p className="text-ink-700/60 text-sm py-8 text-center">{t.notFound}</p>;
 
   const isAuthor = currentUserId === post.author_id;
-  const locale = lang === "ru" ? "ru-RU" : "en-GB";
+  const locale = "en-GB";
 
   const badgeLabel =
     post.type === "event" ? t.eventBadge :
@@ -192,10 +190,10 @@ export default function PostDetailPage() {
           {isAuthor && !editing && (
             <div className="flex gap-2 ml-auto">
               <button onClick={() => setEditing(true)} className="text-xs text-ink-700/50 hover:text-crimson-500 transition font-medium">
-                {lang === "en" ? "Edit" : "Редактировать"}
+                Edit
               </button>
               <button onClick={handleDelete} className="text-xs text-ink-700/50 hover:text-red-600 transition font-medium">
-                {lang === "en" ? "Delete" : "Удалить"}
+                Delete
               </button>
             </div>
           )}
@@ -216,10 +214,10 @@ export default function PostDetailPage() {
             />
             <div className="flex gap-2">
               <button onClick={handleEditSave} className="px-4 py-2 rounded-xl bg-crimson-500 text-white text-sm font-bold hover:bg-crimson-700 transition">
-                {lang === "en" ? "Save" : "Сохранить"}
+                Save
               </button>
               <button onClick={() => setEditing(false)} className="px-4 py-2 rounded-xl border border-cream-300 text-sm text-ink-700/70 hover:border-crimson-500 transition bg-white">
-                {lang === "en" ? "Cancel" : "Отмена"}
+                Cancel
               </button>
             </div>
           </div>
