@@ -40,7 +40,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en">
       <head>
         <style>{`
-          /* ── Google Translate widget ── */
+          /* ── Google Translate widget (new DOM: .goog-te-gadget-simple > img + span > a) ── */
           #google_translate_element {
             display: flex !important;
             align-items: center !important;
@@ -50,45 +50,35 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             background: transparent !important;
             border: 1px solid rgba(255,255,255,0.35) !important;
             border-radius: 20px !important;
-            padding: 4px 10px 4px 8px !important;
+            padding: 4px 10px !important;
             font-size: 12px !important;
             line-height: 1 !important;
             display: inline-flex !important;
             align-items: center !important;
             white-space: nowrap !important;
             cursor: pointer !important;
+            gap: 0 !important;
           }
-          #google_translate_element .goog-te-gadget-simple img {
+          /* Hide Google's flag/logo image */
+          #google_translate_element .goog-te-gadget-simple img,
+          #google_translate_element .goog-te-gadget-icon {
             display: none !important;
           }
-          #google_translate_element .goog-te-gadget-simple a {
+          /* Span wrapper + anchor */
+          #google_translate_element .goog-te-gadget-simple > span {
+            display: inline-flex !important;
+            align-items: center !important;
+          }
+          #google_translate_element .goog-te-gadget-simple > span::before {
+            content: "🌐";
+            margin-right: 5px;
+            font-size: 13px;
+            line-height: 1;
+          }
+          #google_translate_element .goog-te-gadget-simple a,
+          #google_translate_element .goog-te-gadget-simple span {
             color: white !important;
             text-decoration: none !important;
-            display: inline-flex !important;
-            align-items: center !important;
-            gap: 3px !important;
-          }
-          #google_translate_element .goog-te-gadget-simple .goog-te-menu-value {
-            display: inline-flex !important;
-            align-items: center !important;
-            gap: 2px !important;
-          }
-          #google_translate_element .goog-te-gadget-simple .goog-te-menu-value span {
-            color: white !important;
-          }
-          /* Hide the | pipe separator */
-          #google_translate_element .goog-te-gadget-simple .goog-te-menu-value > span:nth-child(2) {
-            display: none !important;
-          }
-          /* Add globe icon before language text */
-          #google_translate_element .goog-te-gadget-simple .goog-te-menu-value > span:first-child::before {
-            content: "🌐 ";
-          }
-          /* Style the ▼ arrow */
-          #google_translate_element .goog-te-gadget-simple .goog-te-menu-value > span:last-child {
-            font-size: 9px !important;
-            opacity: 0.6 !important;
-            margin-left: 2px !important;
           }
           .goog-te-banner-frame { display: none !important; }
           body { top: 0 !important; }
@@ -101,18 +91,18 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <PushNotifications />
           <InstallBanner />
         </LanguageProvider>
-        <Script id="gt-init" strategy="afterInteractive">{`
-          function googleTranslateElementInit() {
+        <Script id="gt-init" strategy="beforeInteractive">{`
+          window.googleTranslateElementInit = function() {
             new google.translate.TranslateElement({
               pageLanguage: 'en',
               includedLanguages: 'ru,uk,de,fr,zh-CN,ar,es,it,ja,ko,tr,pl',
               layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
               autoDisplay: false
             }, 'google_translate_element');
-          }
+          };
         `}</Script>
         <Script
-          src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"
+          src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"
           strategy="afterInteractive"
         />
       </body>
