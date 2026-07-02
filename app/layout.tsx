@@ -91,24 +91,16 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <PushNotifications />
           <InstallBanner />
         </LanguageProvider>
-        <Script id="gt-init" strategy="beforeInteractive">{`
-          window.googleTranslateElementInit = function() {
-            new google.translate.TranslateElement({
-              pageLanguage: 'en',
-              includedLanguages: 'ru,uk,de,fr,zh-CN,ar,es,it,ja,ko,tr,pl',
-              layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
-              autoDisplay: false
-            }, 'google_translate_element');
-          };
-        `}</Script>
-        <Script id="gt-load" strategy="afterInteractive">{`
-          (function() {
-            if (document.querySelector('script[src*="translate.google.com"]')) return;
-            var s = document.createElement('script');
-            s.src = 'https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
-            document.head.appendChild(s);
-          })();
-        `}</Script>
+        {/* Google Translate: plain <script> tags bypass Next.js Script deduplication */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `window.googleTranslateElementInit=function(){new google.translate.TranslateElement({pageLanguage:'en',includedLanguages:'ru,uk,de,fr,zh-CN,ar,es,it,ja,ko,tr,pl',layout:google.translate.TranslateElement.InlineLayout.SIMPLE,autoDisplay:false},'google_translate_element');};`,
+          }}
+        />
+        <script
+          async
+          src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"
+        />
       </body>
     </html>
   );
