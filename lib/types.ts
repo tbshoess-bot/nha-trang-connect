@@ -30,6 +30,7 @@ export interface Post {
   listing_type: ListingType | null;
   contact_phone: string | null;
   website: string | null;
+  region: string | null;
   created_at: string;
   author?: Profile;
   participant_count?: number;

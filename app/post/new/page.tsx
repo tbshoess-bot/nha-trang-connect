@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
 import { supabase } from "@/lib/supabase";
 import { type PostType, type ListingType } from "@/lib/types";
+import { REGIONS } from "@/lib/constants";
 import { translations } from "@/lib/translations";
 
 const MapPicker = dynamic(() => import("@/components/MapPicker"), { ssr: false });
@@ -35,6 +36,7 @@ export default function NewPostPage() {
   const [condition, setCondition] = useState<"new" | "used">("used");
   const [contactPhone, setContactPhone] = useState("");
   const [website, setWebsite] = useState("");
+  const [region, setRegion] = useState<string>("Hikkaduwa");
   const [images, setImages] = useState<File[]>([]);
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -85,6 +87,7 @@ export default function NewPostPage() {
       listing_type: type === "listing" ? listingType : null,
       contact_phone: type === "listing" && listingType === "service" ? contactPhone || null : null,
       website: type === "listing" && listingType === "service" ? website || null : null,
+      region,
       event_date: type === "event" && eventDay && eventMonth && eventYear
         ? new Date(`${eventYear}-${eventMonth.padStart(2,"0")}-${eventDay.padStart(2,"0")}T${(eventHour||"12").padStart(2,"0")}:${(eventMinute||"00").padStart(2,"0")}:00`).toISOString()
         : null,
@@ -287,6 +290,16 @@ export default function NewPostPage() {
             </div>
           </>
         )}
+
+        {/* Region */}
+        <div>
+          <label className={labelClass}>📍 Region *</label>
+          <select required value={region} onChange={(e) => setRegion(e.target.value)} className={inputClass}>
+            {REGIONS.map((r) => (
+              <option key={r} value={r}>{r}</option>
+            ))}
+          </select>
+        </div>
 
         <button type="submit" disabled={uploading} className="w-full rounded-xl bg-crimson-500 text-white py-3 text-sm font-bold hover:bg-crimson-700 transition shadow-sm disabled:opacity-50">
           {uploading ? t.uploading : t.postBtn}
